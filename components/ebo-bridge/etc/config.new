@@ -1,0 +1,29 @@
+# This property is used by the clients to connect to IceStorm.
+Proxies.TopicManager = "IceStorm/TopicManager:default -p 9999"
+
+# Proxies for publishes interfaces
+Proxies.EmergencyStopPubPrefix = ""
+
+# Endpoints for subscriptions interfaces
+Endpoints.JoystickAdapterTopic = "tcp -p 0"
+Endpoints.JoystickAdapterPrefix = ""
+
+# Endpoints for implements interfaces
+Endpoints.BatteryStatus = "tcp -p 0"
+Endpoints.CameraSimple = "tcp -p 0"
+Endpoints.DifferentialRobot = "tcp -p 0"
+Endpoints.EmergencyStop = "tcp -p 0"
+Endpoints.EmotionalMotor = "tcp -p 0"
+Endpoints.LEDArray = "tcp -p 0"
+Endpoints.Laser = "tcp -p 0"
+Endpoints.Speech = "tcp -p 0"
+
+
+
+Period.Compute = 100
+Period.Emergency = 500
+
+Ice.Warn.Connections = "0"
+Ice.Trace.Network = "0"
+Ice.Trace.Protocol = "0"
+Ice.MessageSizeMax = "20004800"

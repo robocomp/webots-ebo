@@ -5,8 +5,8 @@ PROTO EBOv2 [
 ]
 {
   Robot {
-  translation 0.05293082729370664 -0.0008751998173391067 0.0043305510198412
-  rotation 0.12321575250529568 0.4494864188248373 0.884748460087146 0.00024085564565549616
+  translation IS translation
+  rotation IS rotation
   children [
     DEF Body Pose {
       translation 0 0 0.01
@@ -947,6 +947,7 @@ PROTO EBOv2 [
           device [
             RotationalMotor {
               name "motor_right"
+              maxVelocity 40
             }
           ]
           endPoint Solid {
@@ -981,6 +982,7 @@ PROTO EBOv2 [
           device [
             RotationalMotor {
               name "motor_left"
+              maxVelocity 40
             }
           ]
           endPoint Solid {

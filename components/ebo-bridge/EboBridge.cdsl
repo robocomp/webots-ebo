@@ -7,12 +7,14 @@ import "EmergencyStopPub.idsl";
 import "CameraSimple.idsl";
 import "BatteryStatus.idsl";
 import "LEDArray.idsl";
+import "JoystickAdapter.idsl";
 
 Component EboBridge
 {
     Communications
     {
         implements DifferentialRobot, Laser, EmergencyStop, Speech, EmotionalMotor, CameraSimple, BatteryStatus, LEDArray;
+        subscribesTo JoystickAdapter;
         publishes EmergencyStopPub;
     };
     language Cpp11;

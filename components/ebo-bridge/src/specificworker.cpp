@@ -21,9 +21,46 @@
 /**
 * \brief Default constructor
 */
-SpecificWorker::SpecificWorker(TuplePrx tprx, bool startup_check) : GenericWorker(tprx)
+SpecificWorker::SpecificWorker(const ConfigLoader& configLoader, TuplePrx tprx, bool startup_check) : GenericWorker(configLoader, tprx)
 {
-    this->startup_check_flag = startup_check;
+this->startup_check_flag = startup_check;
+	if(this->startup_check_flag)
+	{
+		this->startup_check();
+	}
+	else
+	{
+		#ifdef HIBERNATION_ENABLED
+			hibernationChecker.start(500);
+		#endif
+
+		
+		// Example statemachine:
+		/***
+		//Your definition for the statesmachine (if you dont want use a execute function, use nullptr)
+		states["CustomState"] = std::make_unique<GRAFCETStep>("CustomState", period, 
+															std::bind(&SpecificWorker::customLoop, this),  // Cyclic function
+															std::bind(&SpecificWorker::customEnter, this), // On-enter function
+															std::bind(&SpecificWorker::customExit, this)); // On-exit function
+
+		//Add your definition of transitions (addTransition(originOfSignal, signal, dstState))
+		states["CustomState"]->addTransition(states["CustomState"].get(), SIGNAL(entered()), states["OtherState"].get());
+		states["Compute"]->addTransition(this, SIGNAL(customSignal()), states["CustomState"].get()); //Define your signal in the .h file under the "Signals" section.
+
+		//Add your custom state
+		statemachine.addState(states["CustomState"].get());
+		***/
+
+		statemachine.setChildMode(QState::ExclusiveStates);
+		statemachine.start();
+
+		auto error = statemachine.errorString();
+		if (error.length() > 0){
+			qWarning() << error;
+			throw error;
+		}
+		
+	}
 }
 
 /**
@@ -34,13 +71,10 @@ SpecificWorker::~SpecificWorker()
     std::cout << "Destroying SpecificWorker" << std::endl;
 }
 
-bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
-{
-    return true;
-}
-
 void SpecificWorker::initialize()
 {
+
+//chekpoint robocompUpdater
     std::cout << "Initialize worker" << std::endl;
     if(this->startup_check_flag)
     {
@@ -61,7 +95,7 @@ void SpecificWorker::initializeRobot(){
 
     //--------------------------- Camera
     camera = robot->getCamera("camera");
-    if (camera) camera->enable(this->getPeriod(STATES::Compute)); else std::cout << "Cámara no encontrada." << std::endl;
+    if (camera) camera->enable(this->getPeriod("Compute")); else std::cout << "Cámara no encontrada." << std::endl;
 
     // Motors
     const char* motorNames[2] = {"motor_right", "motor_left"};
@@ -77,7 +111,7 @@ void SpecificWorker::initializeRobot(){
         std::string lidar_name = (i == 0) ? "lidar" : "lidar(" + std::to_string(i) + ")";
         webots::DistanceSensor* lidar = robot->getDistanceSensor(lidar_name);
         if (lidar){
-            lidar->enable(this->getPeriod(STATES::Compute));
+            lidar->enable(this->getPeriod("Compute"));
             webotsLidars[i] = lidar;
             robocompLidars.emplace_back();
         } else std::cout << "Lidar: " << lidar_name << " no encontrado." << std::endl;
@@ -96,7 +130,7 @@ void SpecificWorker::initializeRobot(){
         webots::ImageRef* image = display->imageLoad(filePath);
 
         if (image != nullptr) {
-            // Guardar la imagen en el map usando el nombre del archivo como clave
+            // Guardar la imagen en el std::map usando el nombre del archivo como clave
             facesImages[fileName] = image;
             std::cout << "Imagen cargada: " << fileName << std::endl;
         } else {
@@ -125,7 +159,7 @@ void SpecificWorker::initializeRobot(){
     }
 
     //--------------------------- Simulation step
-    robot->step(this->getPeriod(STATES::Compute));
+    robot->step(this->getPeriod("Compute"));
 }
 
 
@@ -134,7 +168,7 @@ void SpecificWorker::compute()
     receivingImageData();
     receivingLidarsData();
     
-    robot->step(this->getPeriod(STATES::Compute));
+    robot->step(this->getPeriod("Compute"));
 }
 
 void SpecificWorker::emergency()
@@ -193,7 +227,7 @@ void SpecificWorker::receivingImageData() {
     imgData.height = camera->getHeight();
     imgData.depth = 3;  // Asumimos una imagen RGB con 3 bytes por píxel (8 bits por canal)
 
-    // Crear un vector de bytes para almacenar los datos de la imagen
+    // Crear un std::vector de bytes para almacenar los datos de la imagen
     const int totalPixels = imgData.width * imgData.height * imgData.depth;
     imgData.image.resize(totalPixels);
 
@@ -521,16 +555,47 @@ bool SpecificWorker::LEDArray_setLEDArray(RoboCompLEDArray::PixelArray pixelArra
     return true;
 }
 
-
 #pragma endregion
 
-void SpecificWorker::printNotImplementedWarningMessage(string functionName)
+//SUBSCRIPTION to sendData method from JoystickAdapter interface
+void SpecificWorker::JoystickAdapter_sendData(RoboCompJoystickAdapter::TData data)
 {
 #ifdef HIBERNATION_ENABLED
     hibernation = true;
 #endif
 
-    cout << "Function not implemented used: " << "[" << functionName << "]" << std::endl;
+    // Declaration of the structure to be filled
+    float adv=0, rot=0;
+    /*
+    // Iterate through the list of buttons in the data structure
+    for (RoboCompJoystickAdapter::ButtonParams button : data.buttons) {
+        // Currently does nothing with the buttons
+    }
+    */
+
+    // Iterate through the list of axes in the data structure
+    for (RoboCompJoystickAdapter::AxisParams axis : data.axes)
+    {
+        // Process the axis according to its name
+        if(axis.name == "rotate")
+            rot = axis.value;
+        else if (axis.name == "advance")
+            adv = axis.value;
+        else
+            std::cout << "[ JoystickAdapter ] Warning: Using a non-defined axes (" << axis.name << ")." << std::endl;
+    }
+    if(pars.do_joystick)
+        DifferentialRobot_setSpeedBase( adv, rot);
+}
+
+
+void SpecificWorker::printNotImplementedWarningMessage(std::string functionName)
+{
+#ifdef HIBERNATION_ENABLED
+    hibernation = true;
+#endif
+
+    std::cout << "Function not implemented used: " << "[" << functionName << "]" << std::endl;
 }
 
 void SpecificWorker::testMovement()
@@ -657,8 +722,6 @@ void SpecificWorker::testFaces() {
     EmotionalMotor_expressSurprise();
     robot->step(1000);  // Esperar 1 segundo
 }
-
-
 
 
 /**************************************/

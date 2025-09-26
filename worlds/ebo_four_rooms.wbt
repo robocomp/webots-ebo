@@ -1,0 +1,149 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "../protos/EBOv2.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Roughcast.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.3120270923104729 -0.31889408300716654 -0.8949556734762285 4.706372513250069
+  position -1.2195259622004317 -3.137615174905669 2.923915763945104
+}
+TexturedBackground {
+  texture "stadium"
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 10 10
+  floorAppearance Parquetry {
+    type "dark strip"
+  }
+}
+Wall {
+  translation 3.25162 -0.11369 8.88178e-16
+  rotation 0 0 1 1.5708
+  name "wall(5)"
+  size 0.2 3.5 1.3
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.28 -4.01 0
+  name "wall(4)"
+  size 0.2 2 1.3
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.52 4.01 0
+  name "wall(3)"
+  size 0.2 2 1.3
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -0.0942505 1.76993 0.446022
+  rotation 0.3574059992787547 -0.35740799927875067 0.8628559982587566 -1.7177653071795866
+  name "wall(6)"
+  size 0.1 1 0.2
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -0.45249 1.73341 0.446022
+  rotation -0.9831056944488314 0.1294279597735375 0.1294279597735375 1.58783
+  name "wall(8)"
+  size 0.1 1 0.2
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -0.285934 1.68115 0.05
+  rotation 1 0 0 -1.5707953071795862
+  name "wall(7)"
+  size 0.2 2 0.2
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -2.74838 -3.00369 8.88178e-16
+  name "wall(2)"
+  size 0.2 4 1.3
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+EBOv2 {
+  hidden translation_0 0.05293078134782296 -0.000875200042858209 0.004328531727312179
+  hidden rotation_0 0.1224391101062705 0.46063382840337963 0.8791047380413953 0.0002423942086578218
+  hidden position_0_0 -0.007694413450087217
+  hidden position2_0_0 -0.010957105998510335
+  hidden position3_0_0 114.91679537799504
+  hidden position_0_1 -0.008189214591556875
+  hidden position2_0_1 -0.059845319643548854
+  hidden position3_0_1 116.89078250859201
+  hidden position_0_2 128.78734064930467
+  hidden position_0_3 128.7873454235921
+  hidden translation_40 -0.08999505811039675 -1.8311449488034436e-08 -0.004972690320821398
+  hidden rotation_40 0.001334138475117109 0.9999678678636186 -0.007904638816422274 1.8195136001644578
+  hidden translation_41 0.10000509771503273 5.2354952425463994e-08 -0.00497183096516363
+  hidden rotation_41 -0.015096752150262311 -0.9996123219826136 0.023394311595789568 2.4899145401835985
+  hidden rotation_46 0.0063458166360033695 0.7070908019683478 -0.7070942853559072 3.128887158610557
+  hidden rotation_47 0.006343986938895389 0.7070916252140861 -0.7070934785315317 3.1288902509231717
+  translation 0.2 -0.0008 0.0043
+  rotation -0.10026004987807469 0.4506063612040535 0.8870748726240013 0.0002
+}
+Wall {
+  translation 1.4 0 0
+  size 0.2 2 1.3
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -2.74838 2.98631 8.88178e-16
+  name "wall(1)"
+  size 0.2 4 1.3
+  appearance Roughcast {
+    colorOverride 0.2 0.2 0.3
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}

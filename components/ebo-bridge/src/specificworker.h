@@ -45,10 +45,8 @@ class SpecificWorker : public GenericWorker
 {
 Q_OBJECT
 public:
-    SpecificWorker(TuplePrx tprx, bool startup_check);
+    SpecificWorker(const ConfigLoader& configLoader, TuplePrx tprx, bool startup_check);
     ~SpecificWorker();
-    bool setParams(RoboCompCommonBehavior::ParameterList params);
-
     RoboCompBatteryStatus::TBattery BatteryStatus_getBatteryState();
     RoboCompCameraSimple::TImage CameraSimple_getImage();
     void DifferentialRobot_correctOdometer(int x, int z, float alpha);
@@ -77,6 +75,8 @@ public:
     bool Speech_say(std::string text, bool overwrite);
     RoboCompLEDArray::PixelArray LEDArray_getLEDArray();
     bool LEDArray_setLEDArray(RoboCompLEDArray::PixelArray pixelArray);
+
+    void JoystickAdapter_sendData(RoboCompJoystickAdapter::TData data);
 
     webots::Supervisor* robot;
     webots::Camera* camera;
@@ -116,18 +116,28 @@ private:
     };
     std::map<std::string, webots::ImageRef*> facesImages;
 
+    struct PARAMS
+    {
+        bool delay = false;
+        bool do_joystick = true;
+    };
+    PARAMS pars;
+
     void initializeRobot();
     void receivingImageData();
     void receivingLidarsData();
     void setExpression(std::string expression);
 
-    void printNotImplementedWarningMessage(string functionName);
+    void printNotImplementedWarningMessage(std::string functionName);
 
     void testMovement();
     void testFaces();
 
     void printPosition();
     void printLidars();
+
+signals:
+        //void customSignal();
 };
 
 #endif

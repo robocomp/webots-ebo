@@ -1,0 +1,13 @@
+import "DifferentialRobot.idsl";
+import "CameraSimple.idsl";
+import "Laser.idsl";
+
+Component EboController
+{
+    Communications
+    {
+        requires DifferentialRobot, CameraSimple, Laser;
+    };
+    language python;
+};
+
